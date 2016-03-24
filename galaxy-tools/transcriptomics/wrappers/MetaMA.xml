@@ -1,0 +1,46 @@
+<tool id="metaMA" name="MetaMA" version="0.1.0">
+	<description>metaMA wrapper</description>
+	<requirements>
+	  <container type="docker">sblanck/testtool:latest</container>
+	</requirements>
+	<command>
+
+		/galaxy-tools/stderr_wrapper.py Rscript 
+		/galaxy-tools/transcriptomics/MetaMA/MetaMA.R
+		#for $currentInput in $inputList
+        	"${currentInput.rdataset}"
+		 	"${currentInput.selectCondition}"
+        #end for
+       		$result_html 
+			$result_html.extra_files_path
+		/galaxy-tools/transcriptomics/MetaMA/MetaMa_tpl.html
+	</command>
+	
+	<inputs>
+	
+		<repeat name="inputList" title="Datasets">
+		<param name="rdataset" type="data" format="rdata" label="RData" help="RData to be used"/>
+
+		<param name="conditions" type="data" format="cond" label="Conditions" help="conditions associated with the rData file"/>
+				
+		<param name="selectCondition" type="select" label="tumor condition">
+			<options from_dataset="conditions">
+    		<column name="name" index="0"/>
+    		<column name="value" index="0"/>
+		</options>
+		</param>	
+		
+	
+	
+	</repeat>
+	
+	</inputs>
+	<outputs>
+		<data format="html" name="result_html" label="Annotations"/>
+	    </outputs>
+
+	<help>
+		NOTE: This metaMA wrapper performs p-value combination from multiples studies with the same probes. If you need to normalize your data, use "matrix_normalisation" tool on each file. Then, use "Merge Standard datasets(copied)" tool to make a multiple file dataset.
+	</help>
+
+</tool>

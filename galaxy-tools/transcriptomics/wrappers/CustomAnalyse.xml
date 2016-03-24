@@ -1,0 +1,64 @@
+<tool id="customAnalyse" name="CustomAnalyse" version="0.1.0">
+	<description>Custom Analyse</description>
+	<requirements>
+	  <container type="docker">sblanck/testtool:latest</container>
+	</requirements>
+	<command>
+
+		/galaxy-tools/stderr_wrapper.py Rscript 
+		/galaxy-tools/transcriptomics/CustomAnalyse/CustomAnalyse.R
+		   	#for $input in $inputs
+                "${input}"
+			    "${input.name}"
+     		#end for
+			"${target}"
+			"${selectCondition1}"
+			"${selectCondition2}"
+			$result_export_eset
+       		$result_export_conditions
+			$result_html 
+			$result_html.files_path
+		/galaxy-tools/transcriptomics/CustomAnalyse/CustomAnalyse_tpl.html
+	</command>
+	
+	<inputs>
+	
+		<param name="inputs" type="data" format="cel" multiple="true" label=".CEL files" help=".CEL files to be used"/>
+
+		<param name="target" type="data" format="txt" label="target file" help="target file associated with the .CEL file dataset"/>
+		
+		<!--param name="normalisation" type="select" label="Preprocessing/normalization">
+		<options>
+    		<option value="rma">rma</option>
+            <option value="quantile">quantile normalization</option>
+            <option value="log2">log2</option>
+            <option value="none">none</option>
+		</options>	
+		</param-->
+				
+		<param name="selectCondition1" type="select" display="checkboxes" label="Condition 1" multiple="true">
+			<options from_dataset="target">
+    		<column name="name" index="0"/>
+    		<column name="value" index="0"/>
+		</options>
+		</param>	
+		
+		<param name="selectCondition2" type="select" display="checkboxes" label="Condition 2" multiple="true">
+			<options from_dataset="target">
+    		<column name="name" index="0"/>
+    		<column name="value" index="0"/>
+		</options>
+		</param>	
+	
+	</inputs>
+	<outputs>
+		<data format="html" name="result_html" label="Annotations"/>
+		<data format="rdata" name="result_export_eset" label="export expressionSet"/>		
+		<data format="cond" name="result_export_conditions" label="export conditions"/>
+	</outputs>
+
+	<help>
+		NOTE: This wrapper performs p-value combination from multiples studies with the same probes. If you need to normalize your data, use "matrix_normalisation" tool on each file. Then, use "Merge Standard datasets(copied)" tool to make a multiple file dataset.
+	</help>
+
+</tool>

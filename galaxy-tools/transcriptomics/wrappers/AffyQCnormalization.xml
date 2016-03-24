@@ -1,0 +1,44 @@
+<tool id="QCnormalization" name="QCnormalization" version="0.1.0">
+	<description>Quality control and normalization of affymetric expression data</description>
+	<requirements>
+	  <container type="docker">sblanck/testtool:latest</container>
+	</requirements>
+	<command>
+
+		/galaxy-tools/stderr_wrapper.py Rscript 
+		/galaxy-tools/transcriptomics/AffyQCnormalization/AffyQCnormalization.R
+		   	#for $input in $inputs
+                "${input}"
+			    "${input.name}"
+     		#end for
+			"${normalization}"
+			$result_export_eset
+       		$result_html
+			$result_html.files_path
+		/galaxy-tools/transcriptomics/AffyQCnormalization/AffyQCnormalization_tpl.html
+		</command>
+	
+	<inputs>
+	
+		<param name="inputs" type="data" format="cel" multiple="true" label=".CEL files" help=".CEL files to be used"/>
+
+		<param name="normalization" type="select" label="Preprocessing/normalization">
+		
+    		<option value="rma">rma (backgroung correction + quantile normalization + log2)</option>
+            <option value="quantile">quantile normalization + log2</option>
+            <option value="background">background correction + log2</option>
+            <option value="log2">log2 only</option>
+           
+		
+		</param>
+		
+	</inputs>
+	<outputs>
+		<data format="rdata" name="result_export_eset" label="export expressionSet"/>		
+		<data format="html" name="result_html" label="QC result"/>
+	</outputs>
+
+	<help>
+	</help>
+
+</tool>
