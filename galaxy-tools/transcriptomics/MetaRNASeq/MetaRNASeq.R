@@ -49,7 +49,7 @@ file.conn = file(diag.html, open="w")
 writeLines( c("<html><body bgcolor='lightgray'>"), file.conn)
 
 # Perform deseq analysis on each study
-for(f in listFiles)
+for(f in listfiles)
 {
   study_name=unlist(strsplit(unlist(strsplit(f,"_"))[3],"[.]"))[1]
   d <- read.table(f, sep=" ", header=TRUE, row.names=1)
