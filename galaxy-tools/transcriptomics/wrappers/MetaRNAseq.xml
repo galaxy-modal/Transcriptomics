@@ -8,7 +8,8 @@
 		/galaxy-tools/stderr_wrapper.py Rscript 
 		/galaxy-tools/transcriptomics/MetaRNASeq/MetaRNASeq.R 
 		#for $currentInput in $inputList
-        	${currentInput}
+        	"${currentInput}"
+			"${currentInput.name}"	
 		 #end for	
 			$comparison 
 			$method 

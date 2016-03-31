@@ -19,7 +19,7 @@ RUN Rscript -e "source('http://bioconductor.org/biocLite.R')" \
 			-e "biocLite('DESeq')" \
 			-e "biocLite('HTSFilter')" \
 			-e "install.packages('metaMA', repos='http://cran.us.r-project.org')" \
-			-e "install.packages('metaRNAseq', repos='http://cran.us.r-project.org')" \
+			-e "install.packages('metaRNASeq', repos='http://cran.us.r-project.org')" \
 			-e "install.packages('jsonlite', repos='http://cran.us.r-project.org')" \
 			-e "install.packages('VennDiagram', repos='http://cran.us.r-project.org')"
 
