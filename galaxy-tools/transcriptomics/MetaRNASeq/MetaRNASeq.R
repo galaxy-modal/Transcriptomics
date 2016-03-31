@@ -1,6 +1,5 @@
 # Run metaRNASeq in Galaxy
 # This script is based on a deseq wrapper made by nikhil-joshi
-## Format: Rscript metaRNASeq.R countsfolder comparison dispersionMethod output.txt diag.html diag_path
 ##
 ## The incoming data must have the first column be the gene names, and
 ## the rest raw counts. The column names must follow "condition.name"
