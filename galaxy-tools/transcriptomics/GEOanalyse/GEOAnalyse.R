@@ -3,24 +3,21 @@ library(GEOquery)
 library(limma)
 library(jsonlite)
 
-#source("http://bioconductor.org/biocLite.R")
-#library(DeSousa2013)
-
-
 cargs<-commandArgs()
 cargs<-cargs[(which(cargs=="--args")+1):length(cargs)]
 
 nbargs=length(cargs)
 Rdata=cargs[[1]]
-condition=cargs[[2]]
+condition1=cargs[[2]]
+condition2=cargs[[3]]
+nbresult=cargs[[4]]
+transformation=cargs[[5]]
+result<-cargs[[6]]
+result.path<-cargs[[7]]
+export_rdata=cargs[[8]]
+result.template=cargs[[9]]
 
-#tables<-cargs[[1]]
-#tech<-cargs[[2]]
-result<-cargs[[3]]
-result.path<-cargs[[4]]
-result.template=cargs[[5]]
 
-nbresult=1000
 load(Rdata)
 gset=eset
 
@@ -35,10 +32,19 @@ normalization<-function(data){
 		return (ex)
 	}
 }
-exprs(gset)=normalization(gset)
-#sink("/dev/null")
-#dir.create(result.file.path,recursive=TRUE)
-sml=paste0("G",as.numeric(tolower(as.character(pData(gset)["source_name_ch1"][,1]))!=condition))
+
+if (transformation=="auto"){
+	exprs(gset)=normalization(gset)
+} else if (transformation=="yes"){
+	exprs(gset)=log2(exprs(gset))			
+}
+
+selected=c(which((tolower(as.character(pData(gset)["source_name_ch1"][,1]))==condition1)), 
+		which(tolower(as.character(pData(gset)["source_name_ch1"][,1]))==condition2))
+
+gset=gset[,selected]
+sml=paste0("G",as.numeric(tolower(as.character(pData(gset)["source_name_ch1"][,1]))!=condition1))
+
 fl <- as.factor(sml)
 gset$description <- fl
 
@@ -48,26 +54,20 @@ colnames(design) <- levels(fl)
 fit <- lmFit(gset, design)
 cont.matrix <- makeContrasts(G1-G0, levels=design)
 fit2 <- contrasts.fit(fit, cont.matrix)
-fit2 <- eBayes(fit2, 0.01)
+fit2 <- eBayes(fit2)
 tT <- topTable(fit2, adjust="fdr", sort.by="B", number=nbresult)
 gpl <- annotation(gset)
 platf <- getGEO(gpl, AnnotGPL=TRUE)
 ncbifd <- data.frame(attr(dataTable(platf), "table"))
 
-# replace original platform annotation
-tT <- tT[setdiff(colnames(tT), setdiff(fvarLabels(gset), "ID"))]
 tT <- merge(tT, ncbifd, by="ID")
-tT <- tT[order(tT$P.Value), ]  # restore correct order
+tT <- tT[order(tT$P.Value), ]  
 
-tT <- subset(tT, select=c("Platform_SPOTID","ID","adj.P.Val","P.Value","t","B","logFC","Gene.symbol","Gene.title","Chromosome.annotation","GO.Function.ID"))
+tT <- subset(tT, select=c("Platform_SPOTID","ID","adj.P.Val","P.Value","t","B","logFC","Gene.symbol","Gene.title","Gene.ID","Chromosome.annotation","GO.Function.ID"))
 tT<-format(tT, digits=2, nsmall=2)
 colnames(tT)=gsub(pattern = "\\.",replacement = "_",colnames(tT))
 matrixtT=as.matrix(tT)
 datajson=toJSON(matrixtT,pretty = TRUE)
-#json=paste0("{\"data\":",datajson,"}")
-#jsonfile=paste0(result.file.path,"/data.json")
-#write(file = jsonfile, json)
-#file.copy("./GEOAnalyse_tpl.html",result)
 
 htmlfile=readChar(result.template, file.info(result.template)$size)
 htmlfile=gsub(x=htmlfile,pattern = "###DATAJSON###",replacement = datajson, fixed = TRUE)
@@ -76,10 +76,22 @@ dir.create(result.path, showWarnings = TRUE, recursive = FALSE)
 boxplot="boxplot.png"
 png(boxplot,width=800,height = 400)
 par(mar=c(7,5,1,1))
-boxplot(exprs(gset),las=2,outline=FALSE)
+boxplot(exprs(eset),las=2,outline=FALSE,main="Raw data")
 dev.off()
-htmlfile=gsub(x=htmlfile,pattern = "###BOXPLOT###",replacement = boxplot, fixed = TRUE)
+htmlfile=gsub(x=htmlfile,pattern = "###RAWBOXPLOT###",replacement = boxplot, fixed = TRUE)
 file.copy(boxplot,result.path)
+
+if (!identical(exprs(gset),exprs(eset))) {
+	boxplotlog2="boxplotlog2.png"
+	png(boxplotlog2,width=800,height = 400)
+	par(mar=c(7,5,1,1))
+	boxplot(exprs(gset),las=2,outline=FALSE,main="Log2 transform data")
+	dev.off()
+	htmlfile=gsub(x=htmlfile,pattern = "###LOG2BOXPLOT###",replacement = paste0("<img src='",boxplotlog2,"'>"), fixed = TRUE)
+	file.copy(boxplotlog2,result.path) 
+} else{
+	htmlfile=gsub(x=htmlfile,pattern = "###LOG2BOXPLOT###",replacement = "", fixed = TRUE)
+}
 
 histopvalue="histopvalue.png"
 
@@ -90,22 +102,8 @@ volcanoplot(fit2,coef=1,highlight=10)
 htmlfile=gsub(x=htmlfile,pattern = "###HIST###",replacement = histopvalue, fixed = TRUE)
 dev.off()
 file.copy(histopvalue,result.path)
-#file.conn=file(diag.html,open="w")
 
-#writeLines(c("<html><body bgcolor='lightgray'>"),file.conn)
-
-
+save(eset=gset,file=export_rdata)
 
 write(htmlfile,result)
 
-#l=list()
-#for(i in 1:length(esets))
-#{
-#	l[[paste("study",i,sep="")]]<-res[[i]]
-#}
-#l[["Meta"]]=res[[length(res)-1]]
-#showVenn(res,file.path(temp.files.path,"venn.png"))
-#writeLines(c("<h2>Venn diagram</h2>"),file.conn)
-#writeLines(c("<img src='venn.png'><br/><br/>"),file.conn)
-#writeLines(c("</body></html>"),file.conn)
-#close(file.conn)

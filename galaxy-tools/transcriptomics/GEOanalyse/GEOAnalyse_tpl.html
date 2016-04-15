@@ -69,7 +69,7 @@ tr.shown td.details-control {
 
 function format ( d ) {
     // `d` is the original data object for the row
-    var test=d[10].split("///");
+    var test=d[11].split("///");
     var strLength=test.length;
     var result="";
     for (var i=0;i<strLength;i++) {
@@ -78,7 +78,7 @@ function format ( d ) {
     return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
         '<tr>'+
             '<td>Gene Symbol:</td>'+
-            '<td style="width:100%;overflow: hidden;white-space: normal;">'+d[7]+'</td>'+
+            '<td style="width:100%;overflow: hidden;white-space: normal;">'+'<a href="http://www.ncbi.nlm.nih.gov/gene/'+d[9]+'">'+d[7]+'</a>'+'</td>'+
         '</tr>'+
         '<tr>'+
             '<td>Gene Title:</td>'+
@@ -111,7 +111,8 @@ $(document).ready(function() {
 	    {title : "B" },
 	    {title : "logFC" },
 	    {title : "Gene_symbol"},
-            {title : "Gene_title"},
+	    {title : "Gene_title"},
+	    {title : "Gene_ID"},
 	    {title : "Chromosome_annotation"},
 	    {title : "GO_Function_ID"}
 
@@ -146,16 +147,18 @@ $(document).ready(function() {
 
 	</script>
 </head>
-<h2>Boxplots</h2>
-<img src='###BOXPLOT###'><br/>
-</td><td>
 <body>
-<h2>P-value histogram</h2>
+
+<h2>Boxplots</h2>
+<img src='###RAWBOXPLOT###'><br/>
+</td><td>
+###LOG2BOXPLOT###<br/>
+</td><td>
+<h2>P-value histogram and Volcano plot</h2>
 <img src='###HIST###'><br/>
 </td><td>
-<body>
-<table id="example" class="compact stripe row-border" cellspacing="0" width="100%">
-    
-    </table>
+
+<table id="example" class="compact stripe row-border" cellspacing="0" width="100%"
+</table>
 </body>
 </html>

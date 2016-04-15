@@ -9,7 +9,8 @@
 		/galaxy-tools/transcriptomics/MetaMA/MetaMA.R
 		#for $currentInput in $inputList
         	"${currentInput.rdataset}"
-		 	"${currentInput.selectCondition}"
+		 	"${currentInput.selectCondition1}"
+			"${currentInput.selectCondition2}"
         #end for
        		$result_html 
 			$result_html.extra_files_path
@@ -23,7 +24,13 @@
 
 		<param name="conditions" type="data" format="cond" label="Conditions" help="conditions associated with the rData file"/>
 				
-		<param name="selectCondition" type="select" label="tumor condition">
+		<param name="selectCondition1" type="select" label="Condition 1">
+			<options from_dataset="conditions">
+    		<column name="name" index="0"/>
+    		<column name="value" index="0"/>
+		</options>
+		</param>
+		<param name="selectCondition2" type="select" label="Condition 2">
 			<options from_dataset="conditions">
     		<column name="name" index="0"/>
     		<column name="value" index="0"/>
@@ -36,11 +43,10 @@
 	
 	</inputs>
 	<outputs>
-		<data format="html" name="result_html" label="Annotations"/>
+		<data format="html" name="result_html" label="Meta-analysis results of ${inputList.name}"/>
 	    </outputs>
 
 	<help>
-		NOTE: This metaMA wrapper performs p-value combination from multiples studies with the same probes. If you need to normalize your data, use "matrix_normalisation" tool on each file. Then, use "Merge Standard datasets(copied)" tool to make a multiple file dataset.
 	</help>
 
 </tool>

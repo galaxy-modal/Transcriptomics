@@ -5,9 +5,6 @@ library(limma)
 library(jsonlite)
 library(affy)
 library(dplyr)
-#source("http://bioconductor.org/biocLite.R")
-#library(DeSousa2013)
-
 
 cargs<-commandArgs()
 cargs<-cargs[(which(cargs=="--args")+1):length(cargs)]
@@ -27,19 +24,12 @@ result=cargs[[nbargs-4]]
 result.path=cargs[[nbargs-3]]
 result.template=cargs[[nbargs-2]]
 
-print("result.path")
-print(result.path)
-
 dir.create(result.path, showWarnings = TRUE, recursive = FALSE)
 for(i in 1:length(celList))
 {
-	print(celList[i])
-	print(celFileNameList[i])
 	file.copy(celList[i],paste0("./",celFileNameList[i]))
 }
 
-
-print("passé")
 data <- ReadAffy(filenames=celFileNameList, celfile.path=".")
 htmlfile=readChar(result.template, file.info(result.template)$size)
 
@@ -69,20 +59,7 @@ MAplot(data)
 dev.off()
 htmlfile=gsub(x=htmlfile,pattern = "###PLOTMA###",replacement = plotMA, fixed = TRUE)
 file.copy(plotMA,result.path)
-#histopvalue="histopvalue.png"
 
-
-
-#png(histopvalue,width=800,height = 400)
-#par(mfrow=c(1,1))
-#hist(fit2$F.p.value,nclass=100)
-#volcanoplot(fit2,coef=1,highlight=10)
-#htmlfile=gsub(x=htmlfile,pattern = "###HIST###",replacement = histopvalue, fixed = TRUE)
-#dev.off()
-#file.copy(histopvalue,result.path)
-#file.conn=file(diag.html,open="w")
-
-#writeLines(c("<html><body bgcolor='lightgray'>"),file.conn)
 
 if (normalization == "rma") {
 	eset <- rma(data)
@@ -110,6 +87,7 @@ par(mfrow=c(nblines,3))
 for (i in 1:length(celList)){
 plotMA(eset,i)
 }
+
 dev.off()
 htmlfile=gsub(x=htmlfile,pattern = "###PLOTMANORM###",replacement = plotMAnorm, fixed = TRUE)
 file.copy(plotMAnorm,result.path)

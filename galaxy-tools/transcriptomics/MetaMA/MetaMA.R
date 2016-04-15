@@ -4,24 +4,23 @@ library(annaffy)
 library(VennDiagram)
 library(GEOquery)
 
-#source("http://bioconductor.org/biocLite.R")
-#library(DeSousa2013)
-
-
 cargs<-commandArgs()
 cargs<-cargs[(which(cargs=="--args")+1):length(cargs)]
 
 nbargs=length(cargs)
 rdataList=list()
-conditionList=list()
+condition1List=list()
+condition2List=list()
 
-for (i in seq(1,nbargs-5,2))
+for (i in seq(1,nbargs-5,3))
 {
 	Rdata=cargs[[i]]	
-	condition=cargs[[i+1]]
+	condition1=cargs[[i+1]]
+	condition2=cargs[[i+2]]
 	load(Rdata)
 	rdataList=c(rdataList,(eset))
-	conditionList=c(conditionList,condition)
+	condition1List=c(condition1List,condition1)
+	condition2List=c(condition2List,condition2)
 }
 
 #tables<-cargs[[1]]
@@ -36,8 +35,6 @@ result.template<-cargs[[nbargs-2]]
 #file.conn=file(diag.html,open="w")
 
 #writeLines(c("<html><body bgcolor='lightgray'>"),file.conn)
-
-print(result.path)
 
 showVenn<-function(res,file)
 {
@@ -78,6 +75,7 @@ convert2metaMA<-function(listStudies,mergemeth=mean)
 	}
 	conv_unigene=lapply(listStudies,
 			FUN=function(x) unigene2probe(probe2unigene(x)))
+	
 	id=lapply(conv_unigene,names)
 	inter=Reduce(intersect,id)
 	if(length(inter)<=0){stop("no common genes")}
@@ -105,26 +103,32 @@ normalization<-function(data){
 }
 
 
+
+
+filterCondition<-function(gset,condition1, condition2){
+	selected=c(which((tolower(as.character(pData(gset)["source_name_ch1"][,1]))==condition1)), 
+			which(tolower(as.character(pData(gset)["source_name_ch1"][,1]))==condition2))
+	
+	return(gset[,selected])
+	}
+
+rdatalist <- lapply(rdataList, FUN=function(datalist) normalization(datalist))
+
 classes=list()
-for (i in 1:length(conditionList))
+filteredRdataList=list()
+for (i in 1:length(rdatalist))
 {
 	currentData=rdataList[[i]]
-	currentCondition=conditionList[[i]]
-		
-	if (length(unique(tolower(pData(currentData)["source_name_ch1"][,1])))>1)
-	{
-		currentClasses=as.numeric(tolower(as.character(pData(currentData)["source_name_ch1"][,1]))==currentCondition)
-		
-	}	else
-	{
-		currentClasses=as.numeric(tolower(as.character(pData(currentData)["description"][,1]))==currentCondition)
-		
-	}
+	currentCondition1=condition1List[[i]]
+	currentCondition2=condition2List[[i]]
+	#currentData=filterCondition(currentData,currentCondition1,currentCondition2)
+	currentClasses=as.numeric(tolower(as.character(pData(currentData)["source_name_ch1"][,1]))==currentCondition1)
+	filteredRdataList=c(filteredRdataList,currentData)
 	classes=c(classes,list(currentClasses))
 	#write(file="~/galaxy-modal/classes.txt",classes)
 }
-rdatalist <- lapply(rdataList, FUN=function(datalist) normalization(datalist))
 
+#rdataList=filteredRdataList
 conv=convert2metaMA(rdataList)
 esets=conv$esets
 conv_unigene=conv$conv.unigene

@@ -34,7 +34,7 @@
 		
 	</inputs>
 	<outputs>
-		<data format="rdata" name="result_export_eset" label="export expressionSet"/>		
+		<data format="rdata" name="result_export_eset" label="export normalized expressionSet"/>		
 		<data format="html" name="result_html" label="QC result"/>
 	</outputs>
 

@@ -8,9 +8,13 @@
 		/galaxy-tools/stderr_wrapper.py Rscript 
 		/galaxy-tools/transcriptomics/GEOanalyse/GEOAnalyse.R
 		   	"${rdataset}"
-		 	"${selectCondition}"
+		 	"${selectCondition1}"
+		    "${selectCondition2}"
+			"${nbresult}"
+			"${transformation}"
        		$result_html 
 			$result_html.files_path
+			$export_rdata
 		/galaxy-tools/transcriptomics/GEOanalyse/GEOAnalyse_tpl.html
 		
 	</command>
@@ -21,21 +25,33 @@
 
 		<param name="conditions" type="data" format="cond" label="Conditions" help="conditions associated with the rData file"/>
 				
-		<param name="selectCondition" type="select" label="case condition">
+		<param name="transformation" type="select" label="log2 transformation">
+			<option value="auto">auto</option>
+            <option value="yes">yes</option>
+            <option value="no">no</option>
+        </param>
+			
+		<param name="selectCondition1" type="select" label="condition 1">
 			<options from_dataset="conditions">
     		<column name="name" index="0"/>
     		<column name="value" index="0"/>
 		</options>
 		</param>	
+		<param name="selectCondition2" type="select" label="condition 2">
+			<options from_dataset="conditions">
+    		<column name="name" index="0"/>
+    		<column name="value" index="0"/>
+		</options>
+		</param>	
+		<param name="nbresult" type="integer" value="1000" min="1" label="number of top genes" help="Number of genes to be displayed in result datatable"/>
 	
 	</inputs>
 	<outputs>
-		<data format="html" name="result_html" label="Annotations"/>
-		
+		<data format="html" name="result_html" label="Results of analysis of ${rdataset.name}"/>
+		<data format="rdata" name="export_rdata" label="Export of expression set of ${rdataset.name}"/>
 	</outputs>
 
 	<help>
-		NOTE: This metaMA wrapper performs p-value combination from multiples studies with the same probes. If you need to normalize your data, use "matrix_normalisation" tool on each file. Then, use "Merge Standard datasets(copied)" tool to make a multiple file dataset.
 	</help>
 
 </tool>

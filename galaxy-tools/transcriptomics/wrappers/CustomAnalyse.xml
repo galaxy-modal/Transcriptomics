@@ -7,12 +7,11 @@
 
 		/galaxy-tools/stderr_wrapper.py Rscript 
 		/galaxy-tools/transcriptomics/CustomAnalyse/CustomAnalyse.R
-		   	#for $input in $inputs
-                "${input}"
-			    "${input.name}"
-     		#end for
+		   	"${input}"
 			"${target}"
+			"${condition1}"
 			"${selectCondition1}"
+		    "${condition2}"
 			"${selectCondition2}"
 			$result_export_eset
        		$result_export_conditions
@@ -23,7 +22,7 @@
 	
 	<inputs>
 	
-		<param name="inputs" type="data" format="cel" multiple="true" label=".CEL files" help=".CEL files to be used"/>
+		<param name="input" type="data" format="rdata" label="rdata containing previously normalized data"/>
 
 		<param name="target" type="data" format="txt" label="target file" help="target file associated with the .CEL file dataset"/>
 		
@@ -35,17 +34,19 @@
             <option value="none">none</option>
 		</options>	
 		</param-->
-				
+		
+		<param name="condition1" type="text" value="Condition1" label="Condition 1 name"/>		
 		<param name="selectCondition1" type="select" display="checkboxes" label="Condition 1" multiple="true">
 			<options from_dataset="target">
-    		<column name="name" index="0"/>
+    		<column name="name" index="1"/>
     		<column name="value" index="0"/>
 		</options>
 		</param>	
 		
+		<param name="condition2" type="text" value="Condition2" label="Condition 2 name"/>
 		<param name="selectCondition2" type="select" display="checkboxes" label="Condition 2" multiple="true">
 			<options from_dataset="target">
-    		<column name="name" index="0"/>
+    		<column name="name" index="1"/>
     		<column name="value" index="0"/>
 		</options>
 		</param>	
@@ -53,12 +54,11 @@
 	</inputs>
 	<outputs>
 		<data format="html" name="result_html" label="Annotations"/>
-		<data format="rdata" name="result_export_eset" label="export expressionSet"/>		
-		<data format="cond" name="result_export_conditions" label="export conditions"/>
+		<data format="rdata" name="result_export_eset" label="export expressionSet of ${input.name}"/>		
+		<data format="cond" name="result_export_conditions" label="export conditions of ${input.name}"/>
 	</outputs>
 
 	<help>
-		NOTE: This wrapper performs p-value combination from multiples studies with the same probes. If you need to normalize your data, use "matrix_normalisation" tool on each file. Then, use "Merge Standard datasets(copied)" tool to make a multiple file dataset.
 	</help>
 
 </tool>
