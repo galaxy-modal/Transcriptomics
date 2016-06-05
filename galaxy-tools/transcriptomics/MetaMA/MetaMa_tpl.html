@@ -64,32 +64,24 @@ tr.shown td.details-control {
 
 function format ( d ) {
     // `d` is the original data object for the row
-    var test=d[7].split("///");
+    var test=d[6].split("///");
     var strLength=test.length;
     var result="";
     for (var i=0;i<strLength;i++) {
-    	result=result+'<a href="http://amigo.geneontology.org/amigo/term/'+test[i]+'">'+test[i]+'</a>'+', ';
+    	result=result+'<a href="http://amigo.geneontology.org/amigo/term/'+test[i]+'">'+test[i]+'</a>'+',&nbsp';
     }
     return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
         '<tr>'+
             '<td>Gene Symbol:</td>'+
-            '<td style="width:100%;overflow: visible;white-space: normal;">'+d[3]+'</td>'+
+            '<td style="width:100%;overflow: hidden;white-space: normal;">'+'<a href="http://www.ncbi.nlm.nih.gov/gene/'+d[4]+'">'+d[2]+'</a>'+'</td>'+
         '</tr>'+
         '<tr>'+
             '<td>Gene Title:</td>'+
-            '<td style="width:100%;overflow: visible;white-space: normal;">'+d[2]+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>Chromosome Location:</td>'+
-            '<td style="width:100%;overflow: visible;white-space: normal;">'+d[5]+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>Chromosome Annotation:</td>'+
-            '<td style="width:100%;overflow: visible;white-space: normal;">'+d[6]+'</td>'+
+            '<td style="width:100%;overflow: hidden;white-space: normal;">'+d[3]+'</td>'+
         '</tr>'+
         '<tr>'+
             '<td>GO Function ID:</td>'+
-            '<td style="width:100%;overflow: visible;white-space: normal;">'+result+'</td>'+
+            '<td style="width:100%;overflow: hidden;white-space: normal;">'+result+'</td>'+
         '</tr>'+
     '</table>';
 }
@@ -98,7 +90,7 @@ var dataSet=###DATAJSON###;
 var summarySet=###SUMMARYJSON###;
 
 $(document).ready(function() {
-    var table = $('#example').DataTable( {
+        var table = $('#example').DataTable( {
 	"scrollX": true,
 	data: dataSet,
         "columns": [
@@ -108,19 +100,18 @@ $(document).ready(function() {
                 "data":           null,
                 "defaultContent": ''
             },
-            {title : "ID" },
-            {title : "Gene_title" },
-            {title : "Gene_symbol" },
-            {title : "GenBank_Accession" },
-	    {title : "Chromosome_location" },
-	    {title : "Chromosome_annotation" },
+        {title : "ID" },
+        {title : "Gene_symbol"},
+        {title : "Gene_title"},
+        {title : "Gene_ID"},
+	    {title : "Chromosome_annotation"},
 	    {title : "GO_Function_ID"}
 
         ],
-        "order": [[1, 'asc']],
+        
 	dom: 'Bfrtlip',
 	buttons: [
-            'copy', 'csv', 'excel', 'pdf'
+            'copy', 'csv', 'excel'
         ]
 	
     } );

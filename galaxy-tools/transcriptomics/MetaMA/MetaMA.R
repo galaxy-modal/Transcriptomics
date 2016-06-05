@@ -135,7 +135,7 @@ conv_unigene=conv$conv.unigene
 
 #write(file="~/galaxy-modal/esets.txt",length(esets))
 #write(file="~/galaxy-modal/classes.txt",length(classes))
-res=pvalcombination(esets=esets,classes=classes)
+res=pvalcombination(esets=esets,classes=classes,moderated="limma")
 resIDDIRR=IDDIRR(res$Meta,res$AllIndStudies)
 length(res$Meta)
 Hs.Meta=rownames(esets[[1]])[res$Meta]
@@ -146,7 +146,7 @@ platflist <- lapply(gpllist, FUN=function(gpl) getGEO(gpl, AnnotGPL=TRUE))
 ncbifdlist <- lapply(platflist, FUN=function(data) data.frame(attr(dataTable(data), "table")))
 ncbifdresult=lapply(1:length(origId.Meta), FUN=function(i) ncbifdlist[[i]][which(ncbifdlist[[i]]$ID %in% origId.Meta[[i]]),])
 ncbidfannot=do.call(rbind,ncbifdresult)
-ncbidfannot <- subset(ncbidfannot, select=c("Platform_SPOTID","ID","Gene.title","Gene.symbol","GenBank.Accession","Chromosome.location","Chromosome.annotation","GO.Function.ID"))
+ncbidfannot <- subset(ncbidfannot, select=c("Platform_SPOTID","ID","Gene.symbol","Gene.title","Gene.ID","Chromosome.annotation","GO.Function.ID"))
 
 library(jsonlite)
 matrixncbidfannot=as.matrix(ncbidfannot)

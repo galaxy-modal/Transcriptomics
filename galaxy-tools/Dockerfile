@@ -30,6 +30,7 @@ RUN Rscript -e "install.packages('dplyr', repos='http://cran.us.r-project.org')"
 
 RUN mkdir -p /galaxy-tools/transcriptomics/GEOquery
 RUN mkdir -p /galaxy-tools/transcriptomics/GEOanalyse
+RUN mkdir -p /galaxy-tools/transcriptomics/Analyse
 RUN mkdir -p /galaxy-tools/transcriptomics/CustomAnalyse
 RUN mkdir -p /galaxy-tools/transcriptomics/MetaMA
 RUN mkdir -p /galaxy-tools/transcriptomics/MetaRNASeq
@@ -38,8 +39,11 @@ RUN mkdir -p /galaxy-tools/transcriptomics/db
 
 COPY transcriptomics/db/gplToBioc.csv /galaxy-tools/transcriptomics/db/
 COPY transcriptomics/GEOquery/GEOQuery.R /galaxy-tools/transcriptomics/GEOquery/
-COPY transcriptomics/GEOanalyse/GEOAnalyse.R /galaxy-tools/transcriptomics/GEOanalyse/
-COPY transcriptomics/GEOanalyse/GEOAnalyse_tpl.html /galaxy-tools/transcriptomics/GEOanalyse/
+#COPY transcriptomics/GEOanalyse/GEOAnalyse.R /galaxy-tools/transcriptomics/GEOanalyse/
+#COPY transcriptomics/GEOanalyse/GEOAnalyse_tpl.html /galaxy-tools/transcriptomics/GEOanalyse/
+COPY transcriptomics/GEOanalyse/ /galaxy-tools/transcriptomics/GEOanalyse/
+#COPY transcriptomics/GEOanalyse/ /galaxy-tools/transcriptomics/GEOanalyse/
+#COPY transcriptomics/Analyse/ /galaxy-tools/transcriptomics/Analyse/
 COPY transcriptomics/MetaMA/MetaMA.R /galaxy-tools/transcriptomics/MetaMA/
 COPY transcriptomics/MetaMA/MetaMa_tpl.html /galaxy-tools/transcriptomics/MetaMA/
 COPY transcriptomics/MetaRNASeq/MetaRNASeq.R /galaxy-tools/transcriptomics/MetaRNASeq/

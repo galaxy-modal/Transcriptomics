@@ -16,8 +16,8 @@ condition1Name=cargs[[nbargs-10]]
 condition1=cargs[[nbargs-9]]
 condition2Name=cargs[[nbargs-8]]
 condition2=cargs[[nbargs-7]]
-result_export_eset=cargs[[nbargs-6]]
-result_export_conditions=cargs[[nbargs-5]]
+nbresult=cargs[[nbargs-6]]
+result_export_eset=cargs[[nbargs-5]]
 result=cargs[[nbargs-4]]
 result.path=cargs[[nbargs-3]]
 result.template=cargs[[nbargs-2]]
@@ -34,7 +34,7 @@ condition2<-unlist(condition2_tmp)
 
 conditions=c(condition1,condition2)
 
-nbresult=1000
+#nbresult=1000
 dir.create(result.path, showWarnings = TRUE, recursive = FALSE)
 
 targets <- readTargets("targetFile.txt",path=".",sep="\t")

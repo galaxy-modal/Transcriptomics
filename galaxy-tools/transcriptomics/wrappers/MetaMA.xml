@@ -43,7 +43,7 @@
 	
 	</inputs>
 	<outputs>
-		<data format="html" name="result_html" label="Meta-analysis results of ${inputList.name}"/>
+		<data format="html" name="result_html" label="Meta-analysis results"/>
 	    </outputs>
 
 	<help>

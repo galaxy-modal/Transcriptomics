@@ -34,29 +34,29 @@ normalization<-function(data){
 }
 
 if (transformation=="auto"){
-	exprs(gset)=normalization(gset)
+	exprs(eset)=normalization(eset)
 } else if (transformation=="yes"){
-	exprs(gset)=log2(exprs(gset))			
+	exprs(eset)=log2(exprs(eset))			
 }
 
-selected=c(which((tolower(as.character(pData(gset)["source_name_ch1"][,1]))==condition1)), 
-		which(tolower(as.character(pData(gset)["source_name_ch1"][,1]))==condition2))
+selected=c(which((tolower(as.character(pData(eset)["source_name_ch1"][,1]))==condition1)), 
+		which(tolower(as.character(pData(eset)["source_name_ch1"][,1]))==condition2))
 
-gset=gset[,selected]
-sml=paste0("G",as.numeric(tolower(as.character(pData(gset)["source_name_ch1"][,1]))!=condition1))
+eset=eset[,selected]
+sml=paste0("G",as.numeric(tolower(as.character(pData(eset)["source_name_ch1"][,1]))!=condition1))
 
 fl <- as.factor(sml)
-gset$description <- fl
+eset$description <- fl
 
-design <- model.matrix(~ description + 0, gset)
+design <- model.matrix(~ description + 0, eset)
 
 colnames(design) <- levels(fl)
-fit <- lmFit(gset, design)
+fit <- lmFit(eset, design)
 cont.matrix <- makeContrasts(G1-G0, levels=design)
 fit2 <- contrasts.fit(fit, cont.matrix)
 fit2 <- eBayes(fit2)
 tT <- topTable(fit2, adjust="fdr", sort.by="B", number=nbresult)
-gpl <- annotation(gset)
+gpl <- annotation(eset)
 platf <- getGEO(gpl, AnnotGPL=TRUE)
 ncbifd <- data.frame(attr(dataTable(platf), "table"))
 
@@ -76,16 +76,16 @@ dir.create(result.path, showWarnings = TRUE, recursive = FALSE)
 boxplot="boxplot.png"
 png(boxplot,width=800,height = 400)
 par(mar=c(7,5,1,1))
-boxplot(exprs(eset),las=2,outline=FALSE,main="Raw data")
+boxplot(exprs(gset),las=2,outline=FALSE,main="Raw data")
 dev.off()
 htmlfile=gsub(x=htmlfile,pattern = "###RAWBOXPLOT###",replacement = boxplot, fixed = TRUE)
 file.copy(boxplot,result.path)
 
-if (!identical(exprs(gset),exprs(eset))) {
+if (!identical(exprs(eset),exprs(gset))) {
 	boxplotlog2="boxplotlog2.png"
 	png(boxplotlog2,width=800,height = 400)
 	par(mar=c(7,5,1,1))
-	boxplot(exprs(gset),las=2,outline=FALSE,main="Log2 transform data")
+	boxplot(exprs(eset),las=2,outline=FALSE,main="Log2 transform data")
 	dev.off()
 	htmlfile=gsub(x=htmlfile,pattern = "###LOG2BOXPLOT###",replacement = paste0("<img src='",boxplotlog2,"'>"), fixed = TRUE)
 	file.copy(boxplotlog2,result.path) 
@@ -103,7 +103,7 @@ htmlfile=gsub(x=htmlfile,pattern = "###HIST###",replacement = histopvalue, fixed
 dev.off()
 file.copy(histopvalue,result.path)
 
-save(eset=gset,file=export_rdata)
+save(eset,file=export_rdata)
 
 write(htmlfile,result)
 

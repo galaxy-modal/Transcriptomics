@@ -1,5 +1,5 @@
 <tool id="QCnormalization" name="QCnormalization" version="0.1.0">
-	<description>Quality control and normalization of affymetric expression data</description>
+	<description>Quality control and normalization of affymetrix expression data</description>
 	<requirements>
 	  <container type="docker">sblanck/testtool:latest</container>
 	</requirements>
