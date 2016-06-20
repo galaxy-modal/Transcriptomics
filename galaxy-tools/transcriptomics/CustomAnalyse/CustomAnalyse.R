@@ -41,9 +41,10 @@ targets <- readTargets("targetFile.txt",path=".",sep="\t")
 print("passe")
 eset=eset[,which(rownames(eset@phenoData@data) %in% conditions)]
 eset@phenoData@data$source_name_ch1=""
+print("passe11")
 eset@phenoData@data$source_name_ch1[which(rownames(eset@phenoData@data) %in% condition1)]=condition1Name
 eset@phenoData@data$source_name_ch1[which(rownames(eset@phenoData@data) %in% condition2)]=condition2Name
-
+print("passe12")
 sml=paste0("G",as.numeric(as.character(pData(eset)["source_name_ch1"][,1])!=condition1Name))
 fl <- as.factor(sml)
 eset$description <- fl

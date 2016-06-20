@@ -38,9 +38,10 @@ conditions=c(condition1,condition2)
 dir.create(result.path, showWarnings = TRUE, recursive = FALSE)
 
 targets <- readTargets("targetFile.txt",path=".",sep="\t")
-print("passe")
+
 eset=eset[,which(rownames(eset@phenoData@data) %in% conditions)]
 eset@phenoData@data$source_name_ch1=""
+
 eset@phenoData@data$source_name_ch1[which(rownames(eset@phenoData@data) %in% condition1)]=condition1Name
 eset@phenoData@data$source_name_ch1[which(rownames(eset@phenoData@data) %in% condition2)]=condition2Name
 
@@ -49,6 +50,7 @@ fl <- as.factor(sml)
 eset$description <- fl
 design <- model.matrix(~ description + 0, eset)
 
+
 colnames(design) <- levels(fl)
 fit <- lmFit(eset, design)
 cont.matrix <- makeContrasts(G1-G0, levels=design)
@@ -56,35 +58,55 @@ fit2 <- contrasts.fit(fit, cont.matrix)
 fit2 <- eBayes(fit2)
 tT <- topTable(fit2, adjust="fdr", sort.by="B", number=nbresult)
 
-annot <- annotation(eset)
-mapping=read.csv("/galaxy-tools/transcriptomics/db/gplToBioc.csv",stringsAsFactors=FALSE)
-gpl=mapping[which(mapping$bioc_package==annotation(eset)),]$gpl
-gpl=gpl[1]
-annotation(eset)=gpl
-
-platf <- getGEO(gpl, AnnotGPL=TRUE)
-ncbifd <- data.frame(attr(dataTable(platf), "table"))
-
-fData(eset)["ID"]=row.names(fData(eset))
-fData(eset)=merge(x=fData(eset),y=ncbifd,all.x = TRUE, by = "ID")
-colnames(fData(eset))[4]="ENTREZ_GENE_ID"
-row.names(fData(eset))=fData(eset)[,"ID"]
-
-# replace original platform annotation
-tT <- add_rownames(tT, "ID")
-tT <- merge(tT, ncbifd, by="ID")
-tT <- tT[order(tT$P.Value), ]  # restore correct order
-
-tT <- subset(tT, select=c("Platform_SPOTID","ID","adj.P.Val","P.Value","t","B","logFC","Gene.symbol","Gene.title","Gene.ID","Chromosome.annotation","GO.Function.ID"))
-tT<-format(tT, digits=2, nsmall=2)
-colnames(tT)=gsub(pattern = "\\.",replacement = "_",colnames(tT))
-matrixtT=as.matrix(tT)
-datajson=toJSON(matrixtT,pretty = TRUE)
-
-htmlfile=readChar(result.template, file.info(result.template)$size)
-htmlfile=gsub(x=htmlfile,pattern = "###DATAJSON###",replacement = datajson, fixed = TRUE)
-dir.create(result.path, showWarnings = TRUE, recursive = FALSE)
-
+gpl <- annotation(eset)
+if (substr(x = gpl,1,3)!="GPL"){
+	mapping=read.csv("/galaxy-tools/transcriptomics/db/gplToBioc.csv",stringsAsFactors=FALSE)
+	gpl=mapping[which(mapping$bioc_package==annotation(eset)),]$gpl
+	gpl=gpl[1]
+	
+	annotation(eset)=gpl
+	
+	platf <- getGEO(gpl, AnnotGPL=TRUE)
+	ncbifd <- data.frame(attr(dataTable(platf), "table"))
+	
+	fData(eset)["ID"]=row.names(fData(eset))
+	fData(eset)=merge(x=fData(eset),y=ncbifd,all.x = TRUE, by = "ID")
+	colnames(fData(eset))[4]="ENTREZ_GENE_ID"
+	row.names(fData(eset))=fData(eset)[,"ID"]
+	
+	# replace original platform annotation
+	tT <- add_rownames(tT, "ID")
+	tT <- merge(tT, ncbifd, by="ID")
+	tT <- tT[order(tT$P.Value), ]  # restore correct order
+	
+	tT <- subset(tT, select=c("Platform_SPOTID","ID","adj.P.Val","P.Value","t","B","logFC","Gene.symbol","Gene.title","Gene.ID","Chromosome.annotation","GO.Function.ID"))
+	tT<-format(tT, digits=2, nsmall=2)
+	colnames(tT)=gsub(pattern = "\\.",replacement = "_",colnames(tT))
+	matrixtT=as.matrix(tT)
+	datajson=toJSON(matrixtT,pretty = TRUE)
+	
+	htmlfile=readChar(result.template, file.info(result.template)$size)
+	htmlfile=gsub(x=htmlfile,pattern = "###DATAJSON###",replacement = datajson, fixed = TRUE)
+	dir.create(result.path, showWarnings = TRUE, recursive = FALSE)
+} else {
+	
+	gpl <- annotation(eset)
+	platf <- getGEO(gpl, AnnotGPL=TRUE)
+	ncbifd <- data.frame(attr(dataTable(platf), "table"))
+	
+	tT <- merge(tT, ncbifd, by="ID")
+	tT <- tT[order(tT$P.Value), ]  
+	
+	tT <- subset(tT, select=c("Platform_SPOTID","ID","adj.P.Val","P.Value","t","B","logFC","Gene.symbol","Gene.title","Gene.ID","Chromosome.annotation","GO.Function.ID"))
+	tT<-format(tT, digits=2, nsmall=2)
+	colnames(tT)=gsub(pattern = "\\.",replacement = "_",colnames(tT))
+	matrixtT=as.matrix(tT)
+	datajson=toJSON(matrixtT,pretty = TRUE)
+	
+	htmlfile=readChar(result.template, file.info(result.template)$size)
+	htmlfile=gsub(x=htmlfile,pattern = "###DATAJSON###",replacement = datajson, fixed = TRUE)
+	dir.create(result.path, showWarnings = TRUE, recursive = FALSE)
+}
 boxplot="boxplot.png"
 png(boxplot,width=800,height = 400)
 par(mar=c(7,5,1,1))
@@ -97,15 +119,15 @@ histopvalue="histopvalue.png"
 
 png(histopvalue,width=800,height = 400)
 par(mfrow=c(1,2))
-hist(fit2$F.p.value,nclass=100)
-volcanoplot(fit2,coef=1,highlight=10)
+hist(fit2$F.p.value,nclass=100,main="Histogram of p-values", xlab="p-values",ylab="frequency")
+volcanoplot(fit2,coef=1,highlight=10,main="Volcano plot")
 htmlfile=gsub(x=htmlfile,pattern = "###HIST###",replacement = histopvalue, fixed = TRUE)
 dev.off()
 file.copy(histopvalue,result.path)
 
 
 
-write.table(tolower(c(condition1Name,condition2Name)),quote = FALSE,col.names = FALSE, row.names=FALSE,file=result_export_conditions)
+#write.table(tolower(c(condition1Name,condition2Name)),quote = FALSE,col.names = FALSE, row.names=FALSE,file=result_export_conditions)
 saveConditions=c(condition1Name,condition2Name)
 save(eset,saveConditions,file=result_export_eset)
 write(htmlfile,result)

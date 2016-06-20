@@ -12,15 +12,19 @@ rdataList=list()
 condition1List=list()
 condition2List=list()
 
-for (i in seq(1,nbargs-5,3))
+for (i in 1:(nbargs-5))
 {
 	Rdata=cargs[[i]]	
-	condition1=cargs[[i+1]]
-	condition2=cargs[[i+2]]
+	#condition1=cargs[[i+1]]
+	#condition2=cargs[[i+2]]
 	load(Rdata)
+	
 	rdataList=c(rdataList,(eset))
-	condition1List=c(condition1List,condition1)
-	condition2List=c(condition2List,condition2)
+	#condition1List=c(condition1List,condition1)
+	#condition2List=c(condition2List,condition2)
+	condition1List=c(condition1List,saveConditions[1])
+	condition2List=c(condition2List,saveConditions[2])
+	
 }
 
 #tables<-cargs[[1]]

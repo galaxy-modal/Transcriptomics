@@ -1,4 +1,4 @@
-<tool id="metaMAGEOQuery" name="Limma analyse" version="0.1.0">
+<tool id="LimmaAnalyse" name="Limma analyse" version="0.2.0">
 	<description>Limma analyse wrapper</description>
 	<requirements>
 	  <container type="docker">sblanck/testtool:latest</container>
@@ -17,7 +17,7 @@
        		$result_export_eset
        		$result_html 
 			$result_html.files_path
-		/galaxy-tools/transcriptomics/GEOanalyse/Analyse_tpl.html
+		/galaxy-tools/transcriptomics/Analyse/Analyse_tpl.html
 		
 	</command>
 	

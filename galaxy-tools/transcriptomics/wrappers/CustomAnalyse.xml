@@ -1,61 +1,66 @@
-<tool id="customAnalyse" name="CustomAnalyse" version="0.1.0">
-	<description>Custom Analyse</description>
+<tool id="LimmaAnalyse" name="Limma analyse" version="0.1.0">
+	<description>Limma analyse wrapper</description>
 	<requirements>
 	  <container type="docker">sblanck/testtool:latest</container>
 	</requirements>
 	<command>
 
-		/galaxy-tools/stderr_wrapper.py Rscript 
-		/galaxy-tools/transcriptomics/CustomAnalyse/CustomAnalyse.R
-		   	"${input}"
-			"${target}"
+		/galaxy-tools/stderr_wrapper.py Rscript
+		/galaxy-tools/transcriptomics/Analyse/Analyse.R
+		   	"${rdataset}"
+			"${conditions}"
+		 	"${selectCondition1}"
 			"${condition1}"
-			"${selectCondition1}"
-		    "${condition2}"
-			"${selectCondition2}"
-			$result_export_eset
-       		$result_export_conditions
-			$result_html 
+		    "${selectCondition2}"
+			"${condition2}"
+			"${nbresult}"
+       		$result_export_eset
+       		$result_html 
 			$result_html.files_path
-		/galaxy-tools/transcriptomics/CustomAnalyse/CustomAnalyse_tpl.html
+		/galaxy-tools/transcriptomics/GEOanalyse/Analyse_tpl.html
+		
 	</command>
 	
 	<inputs>
 	
-		<param name="input" type="data" format="rdata" label="rdata containing previously normalized data"/>
+		<param name="rdataset" type="data" format="rdata" label="RData" help="RData to be used"/>
 
-		<param name="target" type="data" format="txt" label="target file" help="target file associated with the .CEL file dataset"/>
-		
-		<!--param name="normalisation" type="select" label="Preprocessing/normalization">
-		<options>
-    		<option value="rma">rma</option>
-            <option value="quantile">quantile normalization</option>
-            <option value="log2">log2</option>
-            <option value="none">none</option>
-		</options>	
-		</param-->
-		
-		<param name="condition1" type="text" value="Condition1" label="Condition 1 name"/>		
-		<param name="selectCondition1" type="select" display="checkboxes" label="Condition 1" multiple="true">
-			<options from_dataset="target">
+		<param name="conditions" type="data" format="cond" label="Conditions" help="conditions associated with the rData file"/>
+				
+		<param name="selectCondition1" type="select" label="condition 1">
+			<options from_dataset="conditions">
     		<column name="name" index="1"/>
+    		<column name="value" index="1"/>
+    		<filter type="unique_value" column="1"/>
+		</options>
+		</param>
+		<param name="condition1" type="select" display="checkboxes" label="Condition 1" multiple="true">
+			<options from_dataset="conditions">
+    		<column name="name" index="2"/>
     		<column name="value" index="0"/>
+			<filter  type="param_value" ref="selectCondition1" column="1"/>
 		</options>
 		</param>	
-		
-		<param name="condition2" type="text" value="Condition2" label="Condition 2 name"/>
-		<param name="selectCondition2" type="select" display="checkboxes" label="Condition 2" multiple="true">
-			<options from_dataset="target">
+		<param name="selectCondition2" type="select" label="condition 2">
+			<options from_dataset="conditions">
     		<column name="name" index="1"/>
-    		<column name="value" index="0"/>
+    		<column name="value" index="1"/>
+			<filter type="unique_value" column="1"/>    		
 		</options>
 		</param>	
+		<param name="condition2" type="select" display="checkboxes" label="Condition 2" multiple="true">
+			<options from_dataset="conditions">
+    		<column name="name" index="2"/>
+    		<column name="value" index="0"/>
+			<filter  type="param_value" ref="selectCondition2" column="1"/>
+		</options>
+		</param>	
+		<param name="nbresult" type="integer" value="1000" min="1" label="number of top genes" help="Number of genes to be displayed in result datatable"/>
 	
 	</inputs>
 	<outputs>
-		<data format="html" name="result_html" label="Annotations"/>
-		<data format="rdata" name="result_export_eset" label="export expressionSet of ${input.name}"/>		
-		<data format="cond" name="result_export_conditions" label="export conditions of ${input.name}"/>
+		<data format="html" name="result_html" label="Results of analysis of ${rdataset.name}"/>
+		<data format="rdata" name="result_export_eset" label="Export of expression set of ${rdataset.name}"/>
 	</outputs>
 
 	<help>
