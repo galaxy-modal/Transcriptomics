@@ -25,6 +25,9 @@ RUN Rscript -e "source('http://bioconductor.org/biocLite.R')" \
 
 RUN Rscript -e "source('http://bioconductor.org/biocLite.R')" \
 			-e "biocLite('GEOmetadb')"
+			
+RUN Rscript -e "source('http://bioconductor.org/biocLite.R')" \
+			-e "biocLite('affyPLM')"
 
 RUN Rscript -e "install.packages('dplyr', repos='http://cran.us.r-project.org')" \
 
@@ -46,12 +49,15 @@ COPY transcriptomics/GEOanalyse/ /galaxy-tools/transcriptomics/GEOanalyse/
 COPY transcriptomics/Analyse/ /galaxy-tools/transcriptomics/Analyse/
 COPY transcriptomics/MetaMA/MetaMA.R /galaxy-tools/transcriptomics/MetaMA/
 COPY transcriptomics/MetaMA/MetaMa_tpl.html /galaxy-tools/transcriptomics/MetaMA/
-COPY transcriptomics/MetaRNASeq/MetaRNASeq.R /galaxy-tools/transcriptomics/MetaRNASeq/
+#COPY transcriptomics/MetaRNASeq/MetaRNASeq.R /galaxy-tools/transcriptomics/MetaRNASeq/
+COPY transcriptomics/MetaRNASeq/MetaRNASeq2.R /galaxy-tools/transcriptomics/MetaRNASeq/
 COPY transcriptomics/MetaRNASeq/MetaRNASeq_tpl.html /galaxy-tools/transcriptomics/MetaRNASeq/
 COPY transcriptomics/CustomAnalyse/CustomAnalyse_tpl.html /galaxy-tools/transcriptomics/CustomAnalyse/
 COPY transcriptomics/CustomAnalyse/CustomAnalyse.R /galaxy-tools/transcriptomics/CustomAnalyse/
 COPY transcriptomics/AffyQCnormalization/AffyQCnormalization.R /galaxy-tools/transcriptomics/AffyQCnormalization/
 COPY transcriptomics/AffyQCnormalization/AffyQCnormalization_tpl.html /galaxy-tools/transcriptomics/AffyQCnormalization/
+COPY transcriptomics/ImportDataFromMatrix/ImportDataFromMatrix.R /galaxy-tools/transcriptomics/ImportDataFromMatrix/
+COPY transcriptomics/ImportDataFromMatrix/ImportDataFromMatrix_tpl.html /galaxy-tools/transcriptomics/ImportDataFromMatrix/
 COPY stderr_wrapper.py /galaxy-tools/
 
 RUN chmod a+rw /usr/local/lib/R/site-library

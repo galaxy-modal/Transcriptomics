@@ -58,9 +58,11 @@ fit2 <- eBayes(fit2)
 tT <- topTable(fit2, adjust="fdr", sort.by="B", number=nbresult)
 
 annot <- annotation(eset)
+print(annot)
 mapping=read.csv("/galaxy-tools/transcriptomics/db/gplToBioc.csv",stringsAsFactors=FALSE)
 gpl=mapping[which(mapping$bioc_package==annotation(eset)),]$gpl
 gpl=gpl[1]
+print(gpl)
 annotation(eset)=gpl
 
 platf <- getGEO(gpl, AnnotGPL=TRUE)

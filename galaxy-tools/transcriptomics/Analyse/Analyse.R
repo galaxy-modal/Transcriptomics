@@ -94,6 +94,8 @@ if (substr(x = gpl,1,3)!="GPL"){
 	platf <- getGEO(gpl, AnnotGPL=TRUE)
 	ncbifd <- data.frame(attr(dataTable(platf), "table"))
 	
+	if (!("ID" %in% colnames(tT))){
+		tT <- add_rownames(tT, "ID")}
 	tT <- merge(tT, ncbifd, by="ID")
 	tT <- tT[order(tT$P.Value), ]  
 	

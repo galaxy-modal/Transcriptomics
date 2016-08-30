@@ -138,6 +138,9 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     $('#summary').DataTable( {
+         "columnDefs": [
+    { className: "dt-center", targets: '_all' }
+  ],
         "paging":   false,
         "ordering": false,
         "info":     false,

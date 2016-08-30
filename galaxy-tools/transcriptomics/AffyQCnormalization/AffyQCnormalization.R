@@ -67,7 +67,7 @@ if (normalization == "rma") {
 	eset = rma(data,background = FALSE,normalize = TRUE)
 } else if (normalization == "background"){
 	eset = rma(data,background = TRUE ,normalize = FALSE)
-} else if (normaization == "log2") {
+} else if (normalization == "log2") {
 	eset = rma(data,background = FALSE ,normalize = FALSE)
 }
 	
