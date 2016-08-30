@@ -1,0 +1,35 @@
+<tool id="metarnaseq" name="RNA-seq data meta-analysis">
+	<description>perform meta-analysis thanks to metaRNAseq</description>
+	<requirements>
+	  <container type="docker">sblanck/testtool:latest</container>
+	</requirements>
+	<command>
+
+		/galaxy-tools/stderr_wrapper.py Rscript 
+		/galaxy-tools/transcriptomics/MetaRNASeq/MetaRNASeq2.R 
+		#for $currentInput in $inputList
+        	"${currentInput}"
+			"${currentInput.name}"	
+		 #end for	
+			$top_table 
+			$diagnostic_html 
+			"$diagnostic_html.files_path"
+		/galaxy-tools/transcriptomics/MetaRNASeq/MetaRNASeq_tpl.html	
+	</command>
+
+	<inputs>
+		<param format="tabular" name="inputList" multiple="true" type="data" optional="false" label="Counts file" help="Must have the same number of row in each study. The experimental conditions must be specified in the header of each file"/>
+
+		
+	</inputs>
+
+	<outputs>
+		<data format="tabular" name="top_table" label="Summary of meta-analysis and single studie analysis from ${tool.name} on ${on_string}"/>
+		<data format="html" name="diagnostic_html" label="Charts for ${tool.name} on ${on_string}"/>
+	</outputs>
+
+	<help>
+		NOTE: This metaRNASeq Galaxy tool can only be run on counts files. 
+	</help>
+
+</tool>
