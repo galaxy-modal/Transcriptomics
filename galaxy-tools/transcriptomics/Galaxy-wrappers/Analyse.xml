@@ -1,7 +1,7 @@
 <tool id="LimmaAnalyse" name="Limma analysis" version="0.3.0">
 	<description>Perform gene expression analysis thanks to limma</description>
 	<requirements>
-	  <container type="docker">sblanck/testtool:latest</container>
+	  <container type="docker">sblanck/smat</container>
 	</requirements>
 	<command>
 

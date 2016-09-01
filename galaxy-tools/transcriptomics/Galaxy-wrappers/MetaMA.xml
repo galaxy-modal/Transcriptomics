@@ -1,7 +1,7 @@
 <tool id="metaMA" name="Microarray data meta-analysis" version="0.1.0">
 	<description>Perform meta-analysis thanks to metaMA.</description>
 	<requirements>
-	  <container type="docker">sblanck/testtool:latest</container>
+	  <container type="docker">sblanck/smat</container>
 	</requirements>
 	<command>
 
