@@ -1,0 +1,53 @@
+<tool id="metaMA" name="Microarray data meta-analysis" version="0.1.0">
+	<description>Perform meta-analysis thanks to metaMA.</description>
+	<requirements>
+	  <container type="docker">sblanck/testtool:latest</container>
+	</requirements>
+	<command>
+
+		/galaxy-tools/stderr_wrapper.py Rscript 
+		/galaxy-tools/transcriptomics/MetaMA/MetaMA.R
+		#for $currentInput in $inputList
+        	"${currentInput.rdataset}"
+		 #end for
+       		$result_html 
+			$result_html.extra_files_path
+		/galaxy-tools/transcriptomics/MetaMA/MetaMa_tpl.html
+	</command>
+	
+	<inputs>
+	
+		<repeat name="inputList" title="Datasets">
+		<param name="rdataset" type="data" format="rdata" label="RData" help="RData to be used"/>
+
+		<!--param name="conditions" type="data" format="cond" label="Conditions" help="conditions associated with the rData file"/>
+				
+		<param name="selectCondition1" type="select" label="condition 1">
+			<options from_dataset="conditions">
+    		<column name="name" index="1"/>
+    		<column name="value" index="1"/>
+    		<filter type="unique_value" column="1"/>
+		</options>
+		</param>
+		
+		<param name="selectCondition2" type="select" label="condition 2">
+			<options from_dataset="conditions">
+    		<column name="name" index="1"/>
+    		<column name="value" index="1"/>
+    		<filter type="unique_value" column="1"/>
+		</options>
+		</param-->	
+		
+	
+	
+	</repeat>
+	
+	</inputs>
+	<outputs>
+		<data format="html" name="result_html" label="Meta-analysis results"/>
+	    </outputs>
+
+	<help>
+	</help>
+
+</tool>
