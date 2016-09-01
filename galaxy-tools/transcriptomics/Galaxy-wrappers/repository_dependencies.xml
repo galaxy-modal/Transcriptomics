@@ -1,4 +1,4 @@
 <?xml version="1.0"?>
-<repositories description="MetaMA datatypes">
+<repositories description="SMAT datatypes">
     <repository changeset_revision="d1313ddde2e6" name="smat_datatypes" owner="sblanck" toolshed="http://localhost:9009" />
  </repositories>
