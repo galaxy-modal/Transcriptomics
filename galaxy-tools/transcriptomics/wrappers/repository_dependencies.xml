@@ -1,4 +1,0 @@
-<?xml version="1.0"?>
-<repositories description="MetaMA datatypes">
-    <repository changeset_revision="1fdc7d63f1e5" name="meta_ma_datatypes" owner="sblanck" toolshed="http://localhost:9009" />
- </repositories>
