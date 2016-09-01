@@ -1,11 +1,3 @@
-# Run metaRNASeq in Galaxy
-# This script is based on a deseq wrapper made by nikhil-joshi
-##
-## The incoming data must have the first column be the gene names, and
-## the rest raw counts. The column names must follow "condition.name"
-## layout. This produces a table which shows the results of each
-## single studies, fishercombination, inversenormalcombination methods.
-
 cargs <- commandArgs()
 cargs <- cargs[(which(cargs == "--args")+1):length(cargs)]
 nbargs=length(cargs)
@@ -23,10 +15,7 @@ result.template=cargs[[length(cargs) - 2]]
 
 alpha=0.05
 
-print(listfiles)
-print(listfilenames)
 #print(comparison)
-print(result.template)
 
 listData=lapply(listfiles,read.table)
 orderData=lapply(listData, function(x) x[order(x[1]), ])
@@ -43,7 +32,6 @@ DE=as.data.frame(DE)
 colnames(DE)=listfilenames
 FC=as.data.frame(FC)
 colnames(FC)=listfilenames
-print("passe")
 # the comparison must only have two values and the conds must
 # be a vector from those values, at least one of each.
 
@@ -141,7 +129,7 @@ sumsigns<-apply(signsFC,1,sum)
 commonsgnFC<-ifelse(abs(sumsigns)==dim(signsFC)[2],sign(sumsigns),0)
 
 DEresults <- data.frame(DE=DE,"DE.fishercomb"=ifelse(fishcomb$adjpval<=alpha,1,0),"DE.invnorm"=ifelse(invnormcomb$adjpval<=alpha,1,0))
-print("passe0")
+
 unionDE <- unique(c(fishcomb$DEindices,invnormcomb$DEindices))
 FC.selecDE <- data.frame(DEresults[unionDE,],FC[unionDE,],signFC=commonsgnFC[unionDE])
 keepDE <- FC.selecDE[which(abs(FC.selecDE$signFC)==1),]
@@ -153,7 +141,7 @@ for (i in 1:length(listfiles)) {
 	currentIndstudy_de = rownames(keepDE)[which(keepDE[,i]==1)]
 	indstudy_de[[listfilenames[i]]]=currentIndstudy_de
 }
-print("passé1")
+
 IDDIRRfishcomb=IDD.IRR(fishcomb_de,indstudy_de)
 IDDIRRinvnorm=IDD.IRR(invnorm_de,indstudy_de)
 

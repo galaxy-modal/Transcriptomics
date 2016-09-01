@@ -4,6 +4,7 @@ library(GEOmetadb)
 library(limma)
 library(jsonlite)
 library(affy)
+library(affyPLM)
 library(dplyr)
 
 cargs<-commandArgs()
@@ -84,9 +85,9 @@ plotMAnorm="plotMAnorm.png"
 nblines=length(celList)%/%3 + as.numeric((length(celList)%%3)!=0) 
 png(plotMAnorm,width=800,height =300*nblines )
 par(mfrow=c(nblines,3))
-for (i in 1:length(celList)){
-plotMA(eset,i)
-}
+#for (i in 1:length(celList)){
+MAplot(eset)
+#}
 
 dev.off()
 htmlfile=gsub(x=htmlfile,pattern = "###PLOTMANORM###",replacement = plotMAnorm, fixed = TRUE)

@@ -49,9 +49,9 @@ plotMAnorm="plotMAnorm.png"
 nblines=length(colnames(data))%/%3 + as.numeric((length(colnames(data))%%3)!=0) 
 png(plotMAnorm,width=800,height =300*nblines )
 par(mfrow=c(nblines,3))
-for (i in 1:length(colnames(data))){
-	plotMA(eset,i)
-}
+#for (i in 1:length(colnames(data))){
+	MAplot(eset)
+#}
 
 dev.off()
 htmlfile=gsub(x=htmlfile,pattern = "###PLOTMANORM###",replacement = plotMAnorm, fixed = TRUE)
