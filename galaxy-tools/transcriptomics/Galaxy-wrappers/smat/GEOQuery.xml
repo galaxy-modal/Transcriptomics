@@ -29,9 +29,34 @@
 		<data format="cond" name="conditions" label="conditions of ${GEOQueryID}"/>
         <data format="rdata" name="GEOQueryRData" label="GEOQuery RData of ${GEOQueryID}"/>		
 	</outputs>
+<help>
+	**What it does**     	
+This tool fetches microarray data directly from GEO database, based on the GEOQuery R package. 
+Given a GSE accession ID, it returns an Rdata object containing the data and a text file (.cond file) summarizing the conditions of the experiment. 
+The .cond file is a text file containing one line per sample in the experiment. Each line is made of 3 columns:
+	- Sample ID 
+	- Condition of the biological sample
+	- Description of the biological sample
 
-	<help>
-		
-	</help>
+	**Example** of .cond file      	
+
+The .cond file should look like this ::
+     	
+    Sample ID 	Condition			Description
+	GSM80460	series of 16 tumors	GSM80460 OSCE-2T SERIES OF 16 TUMORS
+	GSM80461	series of 16 tumors	GSM80461 OSCE-4T Series of 16 Tumors
+	GSM80462	series of 16 tumors	GSM80462 OSCE-6T Series of 16 Tumors
+	GSM80476	series of 4 normals	GSM80476 OSCE-2N Series of 4 Normals
+	GSM80477	series of 4 normals	GSM80477 OSCE-9N Series of 4 Normals
+    
+	**Results**
+	- Rdata object containing data for further analysis
+	- Condition (.cond) file summarizing conditions of the experiment
+	- Tabular (.txt) file containing expression data for each sample
+-----
+  		
+
+</help>
+
 
 </tool>

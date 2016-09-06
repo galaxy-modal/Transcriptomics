@@ -40,6 +40,15 @@
 	</outputs>
 
 	<help>
+	**What it does**     	
+ This tool imports data stored in a tabular text file. 
+ Column titles (chip IDs) must match the IDs of the .cond file. 
+ GPL annotation code is required to fetch annotations from GEO
+		
+	**Results**
+	- Bboxplots and MA plots 
+	- Rdata object containing the data for further analysis.
+-----
 	</help>
 
 </tool>

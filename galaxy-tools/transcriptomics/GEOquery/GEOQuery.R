@@ -33,7 +33,8 @@ if (transformation=="auto"){
 	exprs(eset)=log2(exprs(eset))			
 }
 
-write.table(exprs(data1[[1]]),file=GEOQueryData)
+matrixData=exprs(eset)
+write.table(matrixData,col.names=NA,row.names=TRUE,sep="\t",file=GEOQueryData)
 if (length(unique(tolower(pData(data1[[1]])["source_name_ch1"][,1])))>1)
 {
 	conditions=pData(data1[[1]])["source_name_ch1"]
