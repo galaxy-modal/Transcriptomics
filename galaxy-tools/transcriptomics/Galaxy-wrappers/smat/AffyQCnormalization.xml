@@ -39,18 +39,18 @@
 	</outputs>
 
 	<help>
-	**What it does**     	
+**What it does**     	
  The QCnormalization tool offers to ensure the quality of the data and to normalize them. Several normalization methods are available :
 
-	- rma normalization 
-	- quantile normalization + log2
-	- background correction + log2
-	- log2 only
+- rma normalization 
+- quantile normalization + log2
+- background correction + log2
+- log2 only
 
-	**Results**
-	- Several quality figures : microarray images, boxplots and MA plots
-	- Rdata object containing the normalized data for further analysis
------
+**Results**
+
+- Several quality figures : microarray images, boxplots and MA plots
+- Rdata object containing the normalized data for further analysis
   		
 
 </help>

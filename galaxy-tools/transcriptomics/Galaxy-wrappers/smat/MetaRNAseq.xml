@@ -6,7 +6,7 @@
 	<command>
 
 		/galaxy-tools/stderr_wrapper.py Rscript 
-		/galaxy-tools/transcriptomics/MetaRNASeq/MetaRNASeq2.R 
+		/galaxy-tools/transcriptomics/MetaRNASeq/MetaRNASeq.R 
 		#for $currentInput in $inputList
         	"${currentInput}"
 			"${currentInput.name}"	
@@ -29,7 +29,7 @@
 	</outputs>
 
 	<help>
-		NOTE: This metaRNASeq Galaxy tool can only be run on counts files. 
+		
 	</help>
 
 </tool>

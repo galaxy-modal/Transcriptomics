@@ -49,8 +49,7 @@ COPY transcriptomics/GEOanalyse/ /galaxy-tools/transcriptomics/GEOanalyse/
 COPY transcriptomics/Analyse/ /galaxy-tools/transcriptomics/Analyse/
 COPY transcriptomics/MetaMA/MetaMA.R /galaxy-tools/transcriptomics/MetaMA/
 COPY transcriptomics/MetaMA/MetaMa_tpl.html /galaxy-tools/transcriptomics/MetaMA/
-#COPY transcriptomics/MetaRNASeq/MetaRNASeq.R /galaxy-tools/transcriptomics/MetaRNASeq/
-COPY transcriptomics/MetaRNASeq/MetaRNASeq2.R /galaxy-tools/transcriptomics/MetaRNASeq/
+COPY transcriptomics/MetaRNASeq/MetaRNASeq.R /galaxy-tools/transcriptomics/MetaRNASeq/
 COPY transcriptomics/MetaRNASeq/MetaRNASeq_tpl.html /galaxy-tools/transcriptomics/MetaRNASeq/
 COPY transcriptomics/CustomAnalyse/CustomAnalyse_tpl.html /galaxy-tools/transcriptomics/CustomAnalyse/
 COPY transcriptomics/CustomAnalyse/CustomAnalyse.R /galaxy-tools/transcriptomics/CustomAnalyse/
