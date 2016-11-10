@@ -1,7 +1,7 @@
 <tool id="metarnaseq" name="RNA-seq data meta-analysis">
 	<description>perform meta-analysis thanks to metaRNAseq</description>
 	<requirements>
-	  	<container type="docker">sblanck/smat</container>
+	  	<container type="docker">sblanck/smagexp</container>
 	</requirements>
 	<command>
 		<![CDATA[ 	

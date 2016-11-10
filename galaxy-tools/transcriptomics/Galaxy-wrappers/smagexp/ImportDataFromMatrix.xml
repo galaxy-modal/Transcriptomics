@@ -1,7 +1,7 @@
 <tool id="importMatrixData" name="Import custom data">
 	<description>Quality control and normalization of a custom matrix expression data</description>
 	<requirements>
-	  	<container type="docker">sblanck/smat</container>
+	  	<container type="docker">sblanck/smagexp</container>
 	</requirements>
 	<command>
 		<![CDATA[ 

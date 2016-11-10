@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<repositories description="smagexp datatypes">
+    <repository changeset_revision="6a26c791adaa" name="smagexp_datatypes" owner="sblanck" toolshed="http://localhost:9009" />
+ </repositories>

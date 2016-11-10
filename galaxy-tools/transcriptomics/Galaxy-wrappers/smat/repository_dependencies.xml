@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<repositories description="MetaMA datatypes">
+    <repository name="smat_datatypes" owner="sblanck" toolshed="http://localhost:9009" />
+ </repositories>

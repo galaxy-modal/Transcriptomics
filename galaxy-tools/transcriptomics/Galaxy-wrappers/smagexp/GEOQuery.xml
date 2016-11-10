@@ -1,7 +1,7 @@
 <tool id="GEOQuery" name="GEOQuery">
 	<description>GEOQuery wrapper</description>
 	<requirements>
-	  	<container type="docker">sblanck/smat</container>
+	  	<container type="docker">sblanck/smagexp</container>
 	</requirements>
 	<command>
 		<![CDATA[ 

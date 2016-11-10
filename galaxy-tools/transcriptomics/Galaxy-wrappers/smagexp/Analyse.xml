@@ -1,7 +1,7 @@
 <tool id="LimmaAnalyse" name="Limma analysis" version="0.3.0">
 	<description>Perform gene expression analysis thanks to limma</description>
 	<requirements>
-	  	<container type="docker">sblanck/smat</container>
+	  	<container type="docker">sblanck/smagexp</container>
 	</requirements>
 	<command>
 		<![CDATA[ 
@@ -17,6 +17,7 @@
        		$result_export_eset
        		$result_html 
 			$result_html.files_path
+			$result_tabular
 		/galaxy-tools/transcriptomics/Analyse/Analyse_tpl.html
 		]]>
 	</command>
@@ -57,6 +58,8 @@
 	<outputs>
 		<data format="html" name="result_html" label="Results of analysis of ${rdataset.name}"/>
 		<data format="rdata" name="result_export_eset" label="Export of expression set of ${rdataset.name}"/>
+		<data format="tabular" name="result_tabular" label="Text Results of analysis of ${rdataset.name}"/>
+		
 	</outputs>
 	<help>
 <![CDATA[ 
